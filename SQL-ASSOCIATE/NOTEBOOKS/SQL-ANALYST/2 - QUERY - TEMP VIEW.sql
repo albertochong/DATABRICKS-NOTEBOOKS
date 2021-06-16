@@ -2,7 +2,6 @@
 use db_sqlanalyst;
 
 
-
 -- COMMAND ----------
 
 CREATE OR REPLACE TEMPORARY VIEW HomicidesBoston AS
