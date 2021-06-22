@@ -26,6 +26,8 @@
 -- MAGIC       1. REDUCE
 -- MAGIC       
 -- MAGIC 1. Pivots, Rollups, Cubes and Coalesce 
+-- MAGIC 
+-- MAGIC 1. Partitions and Window Functions
 
 -- COMMAND ----------
 
@@ -204,6 +206,78 @@ SELECT
 FROM co2_levels_temporary
 GROUP BY CUBE (dc_id, device_type)
 ORDER BY dc_id, device_type;
+
+-- COMMAND ----------
+
+show tables
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Partitions table
+-- Notice that this table has been PARTITIONED BY the column device_type. 
+-- The result of this kind of partitioning is that the table is stored in separate files. 
+-- This may speed up subsequent queries that can filter out certain partitions. 
+-- These are not the same partitions we refer to when discussing basic Spark architecture.
+
+CREATE TABLE IF NOT EXISTS avg_temps
+USING delta
+PARTITIONED BY (device_type)
+AS
+  SELECT
+    dc_id,
+    date,
+    temps,
+    REDUCE(temps, 0, (t, acc) -> t + acc, acc ->(acc div size(temps))) as avg_daily_temp_C,
+    device_type
+  FROM device_data;
+  
+SELECT * FROM avg_temps;
+
+-- COMMAND ----------
+
+-- DBTITLE 1, Check Partitioning
+SHOW PARTITIONS avg_temps
+
+-- COMMAND ----------
+
+-- DBTITLE 1,Window Functions
+SELECT * FROM avg_temps 
+where dc_id = 'dc-102' and 
+      month(date) = 8
+order by date;
+
+-- COMMAND ----------
+
+SELECT 
+  dc_id,
+  date,
+  avg_daily_temp_C,
+  AVG(avg_daily_temp_C)
+  OVER (PARTITION BY month(date), dc_id)AS average_monthly_temp
+FROM avg_temps
+WHERE month(date) = "8" and dc_id = "dc-102";
+
+-- COMMAND ----------
+
+-- DBTITLE 1,CTE with Window Functions
+WITH diff_chart AS
+(
+SELECT 
+  dc_id,
+  date,
+  avg_daily_temp_C,
+  AVG(avg_daily_temp_C)
+  OVER (PARTITION BY month(date), dc_id) AS average_monthly_temp_C  
+FROM avg_temps
+)
+
+SELECT 
+  dc_id,
+  date,
+  avg_daily_temp_C,
+  average_monthly_temp_C,
+  avg_daily_temp_C - ROUND(average_monthly_temp_C) AS degree_diff
+FROM diff_chart
 
 -- COMMAND ----------
 
