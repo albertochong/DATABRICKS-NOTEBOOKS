@@ -19,8 +19,8 @@
 # COMMAND ----------
 
 # DBTITLE 1,Pasta no S3 Storage Raw Data
-access_key = "AKIA3AIHJQAT57LNJSI4"
-secret_key = "tABj9grzLjmsthfxuFPvDEw+EnO5MVCKGIeTlVHY"
+access_key = ""
+secret_key = ""
 encoded_secret_key = secret_key.replace("/", "%2F")
 aws_bucket_name = "appnos"
 mount_name = "nos"
