@@ -1,5 +1,4 @@
 -- Databricks notebook source
--- MAGIC 
 -- MAGIC %md-sandbox
 -- MAGIC 
 -- MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -33,7 +32,17 @@
 
 -- COMMAND ----------
 
--- TODO 
+
+--describe discounts
+CREATE OR REPLACE TEMPORARY VIEW q1Results AS
+select  cast(discountId as long) discountid,
+        code,
+        cast(cast(price as double) * 100 as int) as price
+from discounts;
+
+
+select * from q1Results;
+
 
 
 -- COMMAND ----------
@@ -53,9 +62,14 @@
 
 -- COMMAND ----------
 
--- TODO
 
+--describe describe discounts2
+CREATE OR REPLACE TEMPORARY VIEW q1Results2 AS
+select cast(active as boolean) active,
+       cast(cents as double)/100 price
+from discounts2;
 
+select * from q1Results2
 
 -- COMMAND ----------
 
