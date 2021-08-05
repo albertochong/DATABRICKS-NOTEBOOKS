@@ -1,5 +1,4 @@
 -- Databricks notebook source
--- MAGIC 
 -- MAGIC %md-sandbox
 -- MAGIC 
 -- MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -30,7 +29,13 @@
 
 -- COMMAND ----------
 
---TODO  
+select purc.transactionId,
+       purc.itemid,
+       pri.value
+from purchases purc
+inner join prices pri
+on purc.itemid = pri.itemid;  
+
 
 
 -- COMMAND ----------
@@ -60,7 +65,17 @@
 
 -- COMMAND ----------
 
--- TODO  
+--select d.discountid,
+       d.price,
+       d.itemname
+from products d
+left outer join discounts p
+on p.itemname = d.itemname
+order by p.itemname
+--SELECT * FROM products 
+--OUTER JOIN discounts
+--USING (itemName);
+
 
 
 -- COMMAND ----------
@@ -77,7 +92,8 @@
 -- COMMAND ----------
 
 -- TODO  
-
+SELECT * FROM stores 
+CROSS JOIN products;
 
 -- COMMAND ----------
 

@@ -1,5 +1,4 @@
 -- Databricks notebook source
--- MAGIC 
 -- MAGIC %md-sandbox
 -- MAGIC 
 -- MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -47,7 +46,13 @@
 
 -- COMMAND ----------
 
--- TODO  
+WITH datesTable AS
+(SELECT CAST(Timestamp AS timestamp) AS date FROM timetable1)
+  SELECT date, 
+  year(date) AS year, 
+  month(date) AS month
+  FROM datesTable
+  WHERE month(date) =12;
 
 -- COMMAND ----------
 
@@ -81,7 +86,18 @@
 
 -- COMMAND ----------
 
--- TODO 
+CREATE OR REPLACE TEMPORARY VIEW q2Results AS
+  WITH datesTable AS
+    (SELECT
+    CAST(Timestamp AS timestamp) AS date FROM timetable2)
+  SELECT date, 
+  year(date) AS year, 
+  month(date) AS month,
+  dayofyear(Date) AS DayOfYear
+  FROM datesTable
+  WHERE month(date) = 4;
+  
+SELECT * FROM q2Results;
 
 
 -- COMMAND ----------

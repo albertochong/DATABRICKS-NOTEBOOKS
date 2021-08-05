@@ -1,5 +1,4 @@
 -- Databricks notebook source
--- MAGIC 
 -- MAGIC %md-sandbox
 -- MAGIC 
 -- MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -44,8 +43,11 @@
 
 -- COMMAND ----------
 
--- TODO  
+CREATE OR REPLACE TEMPORARY VIEW q1Results AS  
+select distinct * from products
+order by aisle NULLS LAST, price;
 
+SELECT * FROM q1Results
 
 -- COMMAND ----------
 
@@ -73,9 +75,16 @@
 
 -- COMMAND ----------
 
---TODO  
+CREATE OR REPLACE TEMPORARY VIEW q2Results AS 
+select name,
+       winodds,
+       to_date(lastfinish) raceDate
+from raceResults
+order by winodds desc
+limit 5;
 
 
+select * from q2Results;
 
 -- COMMAND ----------
 

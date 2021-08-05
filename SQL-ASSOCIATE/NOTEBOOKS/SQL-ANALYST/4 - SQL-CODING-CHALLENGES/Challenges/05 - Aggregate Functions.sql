@@ -1,5 +1,4 @@
 -- Databricks notebook source
--- MAGIC 
 -- MAGIC %md-sandbox
 -- MAGIC 
 -- MAGIC <div style="text-align: center; line-height: 0; padding-top: 9px;">
@@ -43,7 +42,14 @@
 
 -- COMMAND ----------
 
--- TODO 
+CREATE OR REPLACE TEMPORARY VIEW q1Results AS 
+select truefalse,count(truefalse) as count
+from revenue1
+group by truefalse;
+
+
+select * from q1Results
+
 
 -- COMMAND ----------
 
@@ -71,7 +77,10 @@
 
 -- COMMAND ----------
 
--- TODO 
+--CREATE OR REPLACE TEMPORARY VIEW q2results AS
+select distinct(truefalse),max(amount) 
+from revenue2
+group by truefalse
 
 -- COMMAND ----------
 
@@ -100,7 +109,10 @@
 
 -- COMMAND ----------
 
--- TODO 
+--CREATE OR REPLACE TEMPORARY VIEW q2results AS
+select distinct(truefalse),avg(amount) 
+from revenue3
+group by truefalse
 
 -- COMMAND ----------
 
