@@ -138,7 +138,37 @@ group by truefalse
 
 -- COMMAND ----------
 
--- TODO 
+with dateformated
+(
+  select *,cast(utctime as timestamp) as date, 
+         year(cast(utctime as timestamp)) Year, 
+         month(cast(utctime as timestamp)) Month  
+   from revenue4
+)
+select * from
+(
+  select yesno, 
+         amount, 
+         Year
+  from dateformated
+  where Year >= 2002 and Year <= 2003
+)
+PIVOT 
+(
+  sum(amount)
+  FOR Year in (
+    2002, 2003
+  )
+)
+
+SELECT * 
+  FROM (SELECT Year, YesNo, Amount
+        FROM (SELECT year(CAST(UTCTime AS timestamp)) as Year,
+                     YesNo,
+                     Amount 
+              FROM revenue4) 
+        WHERE Year > 2001 AND Year <= 2003)
+  PIVOT ( round( sum(Amount), 2) AS total FOR Year in (2002, 2003) );
 
 -- COMMAND ----------
 
@@ -155,7 +185,10 @@ group by truefalse
 
 -- COMMAND ----------
 
--- TODO 
+select aisle, sum(amount) 
+from products 
+where (itemid is not null and aisle is not null)
+group by aisle
 
 -- COMMAND ----------
 
@@ -184,8 +217,19 @@ group by truefalse
 
 -- COMMAND ----------
 
---TODO 
+--select itemname, month(date) Month, avg(revenue) AvgRevenue 
+--from sales
+--group by itemname, date WITH ROLLUP
+--order by itemname
 
+SELECT 
+    COALESCE(itemName, "All items") AS itemName,
+    --itemName,
+    COALESCE(month(date), "All months") AS month,
+    ROUND(avg(revenue), 2) as avgRevenue
+  FROM sales
+  GROUP BY ROLLUP (itemName, month(date))
+  ORDER BY itemName, month;
 
 -- COMMAND ----------
 

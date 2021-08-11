@@ -1,7 +1,7 @@
 # Databricks notebook source
 # MAGIC %md
 # MAGIC 
-# MAGIC > os arquivos dentro do data lake estão no format JSON, como explicado anteriormente para que você possa ganhar em otimização  
+# MAGIC > Os arquivos dentro do data lake estão no format JSON, como explicado anteriormente para que você possa ganhar em otimização  
 # MAGIC > é extremamente importante que você sempre realize a conversão dos tipos de dados, se estiver trabalhando com spark então definitivamente   
 # MAGIC > utilize apache parquet
 
